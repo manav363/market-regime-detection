@@ -1,0 +1,25 @@
+ticker:
+  default: AAPL
+  universes:
+    - SPY
+    - QQQ
+    - IWM
+    - GLD
+    - TLT
+
+model:
+  horizon: 5
+  n_splits: 5
+  confidence_threshold: 0.55
+  n_estimators: 300
+  max_depth: 6
+  class_weight: balanced
+  random_state: 42
+
+risk:
+  initial_capital: 100000
+  max_position_size: 0.2
+  stop_loss_pct: 0.05
+  risk_per_trade: 0.01
+  transaction_cost_bps: 1.0
+  slippage_bps: 2.0

@@ -1,0 +1,78 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "market-regime-detection"
+version = "0.2.0"
+description = "ML-driven quantitative trading system for market regime detection and risk-managed backtesting"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+authors = [
+  { name = "Manav Garg", email = "manavgarg.dev@gmail.com" }
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Office/Business :: Financial :: Investment"
+]
+
+keywords = [
+    "machine-learning",
+    "quantitative-finance",
+    "trading",
+    "time-series",
+    "backtesting",
+    "market-regime"
+]
+
+dependencies = [
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scikit-learn>=1.2",
+    "yfinance>=0.2",
+    "matplotlib>=3.7",
+    "pyyaml>=6.0",
+    "typer>=0.9"
+]
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=23.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0"
+]
+
+docs = [
+    "mkdocs",
+    "mkdocs-material"
+]
+
+
+[project.urls]
+Homepage = "https://github.com/manavgarg/market-regime-detection"
+Repository = "https://github.com/manavgarg/market-regime-detection"
+Issues = "https://github.com/manavgarg/market-regime-detection/issues"
+
+
+[project.scripts]
+market-regime = "market_regime.main:main"
+market-regime-research = "market_regime.research:main"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests*", "docs*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

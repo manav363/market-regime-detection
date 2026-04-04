@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.DS_Store
+*.pkl
+*.joblib
+models/*.pkl
+models/*.joblib
+experiments/log.jsonl
+reports/
+.env
