@@ -3,10 +3,11 @@
 
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat&logo=python&logoColor=white)
 ![Scikit-Learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?style=flat&logo=scikit-learn&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Dashboard-009688?style=flat&logo=fastapi&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-22c55e?style=flat)
 ![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=flat&logo=github-actions&logoColor=white)
 
-> A production-style machine learning system for detecting market regimes, generating trading signals, managing risk, and evaluating performance using real financial data — validated across 13 years of historical data (2013–2026).
+> A production-style machine learning system for detecting market regimes, generating trading signals, managing risk, and evaluating performance using real financial data — validated across 13 years of historical data (2013–2026). Now with a full Bloomberg-style web dashboard.
 
 ![Equity Curve](assets/equity_curve.png)
 
@@ -14,17 +15,24 @@
 
 ## 🚀 Quick Start
 
+### CLI (Terminal)
 ```bash
-# Install
-git clone https://github.com/yourusername/market-regime-detection.git
+git clone https://github.com/manav363/market-regime-detection.git
 cd market-regime-detection
 python3 -m pip install -e .[dev]
 
-# Run single ticker analysis
+# Single ticker analysis
 market-regime --ticker AAPL
 
-# Run multi-ticker research report
+# Multi-ticker research report
 market-regime-research --tickers AAPL,SPY,QQQ --transaction-cost-bps 0,1,5,10 --slippage-bps 2
+```
+
+### Web Dashboard
+```bash
+pip install fastapi uvicorn
+uvicorn api:app --reload --port 8000
+# Open http://localhost:8000
 ```
 
 ---
@@ -39,6 +47,21 @@ This system:
 - **Generates** confidence-filtered trading signals
 - **Manages** risk using volatility-adjusted position sizing
 - **Reports** performance vs Buy & Hold with full cost modeling
+- **Visualizes** everything through a live web dashboard
+
+---
+
+## 🖥 Web Dashboard
+
+A Bloomberg terminal-style dashboard built with FastAPI + vanilla JS. Three tabs — no frameworks, no bloat.
+
+![Dashboard](assets/dashboard.png)
+
+**Tab 1 — Analyze:** Enter any ticker → runs full walk-forward pipeline → displays decision (BUY/SELL/HOLD), confidence bars, all 6 OOS performance metrics, and fold accuracy visualization.
+
+**Tab 2 — Scanner:** Preset universes (Mag7, Indices, Financials, Tech) or custom tickers → ranked results table sorted by Sharpe ratio.
+
+**Tab 3 — Backtest:** Ticker + adjustable transaction cost + slippage → full backtest with Strategy vs Buy & Hold comparison chart.
 
 ---
 
@@ -73,7 +96,6 @@ Cost model: transaction=1.0 bps, slippage=2.0 bps
 
 ## 🌐 Multi-Ticker Research Results
 
-Command:
 ```bash
 market-regime-research --tickers AAPL,SPY,QQQ --transaction-cost-bps 0,1,5,10 --slippage-bps 2
 ```
@@ -84,7 +106,7 @@ market-regime-research --tickers AAPL,SPY,QQQ --transaction-cost-bps 0,1,5,10 --
 | QQQ    | 1.057      | 883%       | -23.2%       |
 | SPY    | 0.925      | 639%       | -22.6%       |
 
-### Cost Sensitivity (Mean across all tickers)
+### Cost Sensitivity (Mean across AAPL/QQQ/SPY)
 
 | Transaction Cost | OOS Return |
 |-----------------|------------|
@@ -116,11 +138,9 @@ Risk Management
 Backtesting & Benchmarking
 (In-Sample vs OOS · Cost-aware · Buy & Hold comparison)
         ↓
-Decision Engine
-(Action: BUY / SELL / HOLD / EXIT + Confidence + Drawdown)
+Decision Engine                    FastAPI Backend
+(BUY / SELL / HOLD / EXIT)   →    Web Dashboard (dashboard.html)
 ```
-
-All components share validated data pipelines to **prevent look-ahead bias and leakage.**
 
 ---
 
@@ -132,18 +152,18 @@ Action     : HOLD
 Reason     : Low confidence (0.511 < threshold 0.55)
 Confidence : 0.511
 Drawdown   : -14.58%
-Capital    : $879,635.31
-Runtime    : 17.82s
+Capital    : $879,637.33
+Runtime    : 12.79s
 ```
 
-The system enforces **automatic risk discipline** — it refuses to trade when confidence is low, even if the signal is directionally correct.
+The system enforces **automatic risk discipline** — it refuses to trade when confidence is low.
 
 ---
 
 ## 🏗 Project Structure
 
 ```
-market_regime_detection/
+market_regime/
 │
 ├── config/
 │   ├── config.yaml          # All parameters (model, risk, costs)
@@ -172,6 +192,10 @@ market_regime_detection/
 ├── assets/
 │   └── equity_curve.png     # Backtest visualization
 │
+├── api.py                   # FastAPI backend
+├── dashboard.html           # Bloomberg-style web dashboard
+├── Makefile
+├── pyproject.toml
 └── README.md
 ```
 
@@ -181,7 +205,6 @@ market_regime_detection/
 
 ```yaml
 # config/config.yaml
-
 ticker:
   default: AAPL
 
@@ -210,7 +233,7 @@ All config is **validated against a schema at runtime** — no silent misconfigu
 | Multi-ticker summary | `reports/research/multi_ticker_summary.csv` | Cross-asset comparison |
 | Cost sensitivity | `reports/research/cost_sensitivity.csv` | Return vs transaction cost |
 | Research report | `reports/research/research_report.md` | Human-readable summary |
-| Equity curve | Displayed / saved via CLI | Visual backtest result |
+| Equity curve | `assets/equity_curve.png` | Visual backtest result |
 
 ---
 
@@ -231,6 +254,8 @@ CI runs on **GitHub Actions** for Python 3.10, 3.11, and 3.12 on every push.
 |----------|-------|
 | ML | Scikit-learn (Random Forest) |
 | Data | Pandas, NumPy, yFinance |
+| API | FastAPI, Uvicorn |
+| Frontend | Vanilla JS, Chart.js |
 | Visualization | Matplotlib |
 | CLI | Typer |
 | Config | PyYAML + schema validation |
@@ -244,6 +269,7 @@ CI runs on **GitHub Actions** for Python 3.10, 3.11, and 3.12 on every push.
 - Uses **daily OHLCV data** — no intraday execution modeling
 - Limited to **tree-based ML models** (Random Forest)
 - No live broker integration (research system only)
+- Dashboard requires local server — not yet deployed to cloud
 
 These are intentional research simplifications, not oversights.
 
@@ -251,6 +277,7 @@ These are intentional research simplifications, not oversights.
 
 ## 🔮 Roadmap
 
+- [ ] Deploy dashboard to Railway/Render (one-click cloud access)
 - [ ] Hidden Markov Models for unsupervised regime labeling
 - [ ] LSTM / Transformer-based sequence models
 - [ ] Portfolio-level multi-asset optimization
