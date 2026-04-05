@@ -50,6 +50,10 @@ This system:
 
 ---
 
+## 🖥 Wev Url
+
+Url : https://market-regima.up.railway.app
+
 ## 🖥 Web Dashboard
 
 A Bloomberg terminal-style dashboard built with FastAPI + vanilla JS. Three tabs — no frameworks, no bloat.
