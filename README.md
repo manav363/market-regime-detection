@@ -55,7 +55,6 @@ This system:
 
 A Bloomberg terminal-style dashboard built with FastAPI + vanilla JS. Three tabs — no frameworks, no bloat.
 
-![Dashboard](assets/dashboard.png)
 
 **Tab 1 — Analyze:** Enter any ticker → runs full walk-forward pipeline → displays decision (BUY/SELL/HOLD), confidence bars, all 6 OOS performance metrics, and fold accuracy visualization.
 
