@@ -9,8 +9,6 @@
 
 > A production-style machine learning system for detecting market regimes, generating trading signals, managing risk, and evaluating performance using real financial data — validated across 13 years of historical data (2013–2026). Now with a full Bloomberg-style web dashboard.
 
-## Web url
-url : market-regima.up.railway.app
 
 ---
 
