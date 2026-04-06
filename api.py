@@ -45,7 +45,17 @@ def run_cli(ticker: str, timeout: int = 120) -> str:
     Run `market-regime` with the ticker piped via stdin.
     Returns the full stdout+stderr output string.
     """
-    cmd = [os.path.join(ROOT, "venv", "bin", "market-regime")]
+    # Try multiple possible CLI locations (local venv vs Railway)
+    candidates = [
+        os.path.join(ROOT, "venv", "bin", "market-regime"),
+        "/usr/local/bin/market-regime",
+        "/usr/bin/market-regime",
+    ]
+    import shutil
+    cli = next((c for c in candidates if os.path.exists(c)), None) or shutil.which("market-regime")
+    if not cli:
+        raise FileNotFoundError("market-regime CLI not found")
+    cmd = [cli]
 
     try:
         proc = subprocess.run(
