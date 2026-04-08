@@ -50,7 +50,7 @@ This system:
 
 ---
 
-## 🖥 Wev Url
+## 🖥 Web Url
 
 Url : https://market-regima.up.railway.app
 
